@@ -1,0 +1,67 @@
+@{
+    Layout = "_AdminLayout.cshtml";
+    ViewBag.Title = "Complaints";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Admin/Complaints.css" />
+}
+
+<div class="complaints-container">
+    <h2  class="wallet-balance-section" >Complaints Management</h2>
+
+    <table class="complaints-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>User Name</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>John Doe</td>
+                <td>Driver arrived late and was rude.</td>
+                <td>2025-08-05</td>
+                <td><span class="status pending">Pending</span></td>
+                <td><button class="resolve-btn">Resolve</button></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Emily Smith</td>
+                <td>Charged extra for the ride.</td>
+                <td>2025-08-04</td>
+                <td><span class="status pending">Pending</span></td>
+                <td><button class="resolve-btn">Resolve</button></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Michael Johnson</td>
+                <td>Vehicle was unclean and smelled bad.</td>
+                <td>2025-08-03</td>
+                <td><span class="status pending">Pending</span></td>
+                <td><button class="resolve-btn">Resolve</button></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Sarah Williams</td>
+                <td>Driver refused to take the specified route.</td>
+                <td>2025-08-02</td>
+                <td><span class="status pending">Pending</span></td>
+                <td><button class="resolve-btn">Resolve</button></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>David Brown</td>
+                <td>App charged for a cancelled ride.</td>
+                <td>2025-08-01</td>
+                <td><span class="status pending">Pending</span></td>
+                <td><button class="resolve-btn">Resolve</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

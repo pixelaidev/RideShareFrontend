@@ -1,0 +1,75 @@
+.complaints-container {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.complaints-container h2 {
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+.wallet-balance-section {
+    background: linear-gradient(135deg, #748DAE 0%, #9ECAD6 100%);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(116, 141, 174, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.wallet-balance-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    transform: rotate(45deg);
+}
+
+.complaints-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.complaints-table th {
+    background-color: #748DAE;
+    color: #FFFFFF;
+    padding: 10px;
+    text-align: left;
+}
+
+.complaints-table td {
+    padding: 10px;
+    border-bottom: 1px solid #9ECAD6;
+    color: #000000;
+}
+
+.status.pending {
+    color: #FFFFFF;
+    background-color: #748DAE;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+.resolve-btn {
+    background-color: #9ECAD6;
+    color: #000000;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.resolve-btn:hover {
+    background-color: #748DAE;
+    color: #FFFFFF;
+}

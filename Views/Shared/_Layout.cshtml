@@ -1,0 +1,110 @@
+﻿@using System.Security.Claims
+@{
+    var role = User.FindFirst(ClaimTypes.Role)?.Value;
+    var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+}
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - RideShare</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+
+<body>
+@await Html.PartialAsync("_LoginPopup")
+@await Html.PartialAsync("_SignupPopup")
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">RideShare</a>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link">How it Works</a></li>
+                <li><a href="#" class="nav-link">Safety</a></li>
+                <li><a href="#" class="nav-link">Help</a></li>
+
+                <div class="auth-buttons">
+    @if (isAuthenticated)
+    {
+        if (role == "Passenger")
+        {
+            <a href="/Passenger/" class="btn btn-dashboard">Dashboard</a>
+        }
+        else if (role == "Driver")
+        {
+            <a href="/Driver/" class="btn btn-dashboard">Dashboard</a>
+        }
+        else if (role == "Admin")
+        {
+            <a href="/Admin/" class="btn btn-dashboard"> Dashboard</a>
+        }
+    }
+    else
+    {
+        <a href="#" class="btn btn-login" onclick="openPopup('login-popup')">Login</a>
+        <a href="#" class="btn btn-signup" onclick="openPopup('signup-popup')">Sign Up</a>
+    }
+</div>
+
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>RideShare</h3>
+                    <p>Connecting travelers across the world. Our platform makes carpooling safe, affordable, and convenient. Join our community of eco-conscious travelers today.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Safety Guidelines</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Insurance</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RideShare. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

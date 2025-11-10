@@ -1,0 +1,517 @@
+@model RideShareFrontend.DTOs.RideSearchRequestDto
+
+@{
+    ViewData["Title"] = "Search Rides";
+    Layout = "_PassengerLayout.cshtml";
+
+    var bookRideModel = new RideShareFrontend.DTOs.RideBookingCreateViewModel
+    {
+        RideId = 1, // set dynamically via JavaScript later
+
+    };
+}
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>@ViewData["Title"]</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <!-- Leaflet Geosearch CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.8.0/dist/geosearch.css" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-container {
+            background-color: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        .search-box {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .map-container {
+            height: 400px;
+            width: 100%;
+            margin: 20px 0;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .search-box-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-box {
+            flex: 1;
+        }
+
+        .search-button {
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-button:hover {
+            background-color: #2980b9;
+        }
+
+        .submit-button {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .submit-button:hover {
+            background-color: #219653;
+        }
+
+        .instructions {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .date-passengers {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+
+        .date-group {
+            width: 40%;
+        }
+
+        .passengers-group {
+            flex: 1;
+        }
+
+        .dateinput {
+            width: 10vw;
+            margin-left: 3vw;
+            height: 4vh;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="search-container">
+        <h2>Search for Rides</h2>
+        @* Show TempData messages *@
+        @if (ViewBag.Msg != null)
+        {
+            <div class="alert alert-warning">@ViewBag.Msg</div>
+        }
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+        @if (ViewBag.Success != null)
+        {
+            <div class="alert alert-success">@ViewBag.Success</div>
+        }
+
+        <form asp-action="SearchRide" method="post" id="searchRideForm">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="search-box-container">
+                <input type="text" id="origin-search" class="search-box" placeholder="Search origin..." />
+                <button type="button" id="search-origin" class="search-button">Search</button>
+            </div>
+            <div class="form-group">
+                <label asp-for="Origin"></label>
+                <input asp-for="Origin" class="form-control" id="origin-input" />
+                <span asp-validation-for="Origin" class="text-danger"></span>
+                <p class="instructions">Or click on the map to set origin</p>
+            </div>
+
+            <div class="search-box-container">
+                <input type="text" id="destination-search" class="search-box" placeholder="Search destination..." />
+                <button type="button" id="search-destination" class="search-button">Search</button>
+            </div>
+            <div class="form-group">
+                <label asp-for="Destination"></label>
+                <input asp-for="Destination" class="form-control" id="destination-input" />
+                <span asp-validation-for="Destination" class="text-danger"></span>
+                <p class="instructions">Or click on the map to set destination</p>
+            </div>
+
+            <div id="map" class="map-container"></div>
+
+            <div class="date-passengers">
+                <div class="form-group date-group">
+                    <label asp-for="RideDate"></label>
+                    <input asp-for="RideDate" type="date" class="form-control"
+                        min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="RideDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group " style="display: flex; flex-direction: column; width: 40%;">
+                    <label asp-for="Passengers" style="margin-left: 3vw;"></label>
+                    <input asp-for="Passengers" type="number" class="dateinput" min="1" max="10" />
+                    <span asp-validation-for="Passengers" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <button type="submit" class="submit-button">Search Rides</button>
+        </form>
+        @if (ViewBag.RideResults != null)
+        {
+            <div class="mt-5">
+                <h3 class="mb-3">Ride Search Results</h3>
+
+                <!-- Price Filter Inputs -->
+                <div class="form-group mb-3">
+                    <label>Filter by Price:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" id="minPrice" class="form-control" placeholder="Min Price"
+                            style="width: 120px;" />
+                        <input type="number" id="maxPrice" class="form-control" placeholder="Max Price"
+                            style="width: 120px;" />
+                        <button type="button" id="filterButton" class="search-button">Apply</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Driver</th>
+                                <th scope="col">Origin</th>
+                                <th scope="col">Destination</th>
+                                <th scope="col">Departure</th>
+                                <th scope="col">Seats</th>
+                                <th scope="col">Price (₹)</th>
+                                <th scope="col">Actions</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="rideResultsBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Book Ride Modal -->
+            <!-- Modal -->
+
+
+
+            <script>
+                const rides = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RideResults));
+
+                console.log(rides);
+                function renderRides(filteredRides) {
+                    const tbody = document.getElementById('rideResultsBody');
+                    tbody.innerHTML = "";
+
+                    if (!filteredRides.length) {
+                        tbody.innerHTML = `<tr><td colspan="6" class="text-center">No rides found for the selected filter.</td></tr>`;
+                        return;
+                    }
+
+                    filteredRides.forEach(ride => {
+                        const row = `
+                                                                                        <tr>
+                                                                                            <td>${ride.DriverName || " "}</td>
+                                                                                            <td>${ride.Origin}</td>
+                                                                                            <td>${ride.Destination}</td>
+                                                                                            <td>${new Date(ride.DepartureTime).toLocaleString()}</td>
+                                                                                            <td class="text-center">${ride.AvailableSeats}</td>
+                                                                                            <td class="text-end">${parseFloat(ride.PricePerSeat).toFixed(2)}</td>
+                                                                                             <td class="text-center">
+                                                                                                               <button class="btn btn-sm btn-success" onclick="openBookRideModal('${ride.RideId}', '${ride.PricePerSeat}', '${ride.AvailableSeats}')">Book Ride</button>
+
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    `;
+                        tbody.innerHTML += row;
+                    });
+                }
+
+                renderRides(rides);
+
+                document.getElementById("filterButton").addEventListener("click", () => {
+                    const min = parseFloat(document.getElementById("minPrice").value) || 0;
+                    const max = parseFloat(document.getElementById("maxPrice").value) || Infinity;
+
+                    const filtered = rides
+                        .filter(r => r.PricePerSeat >= min && r.PricePerSeat <= max)
+                        .sort((a, b) => a.PricePerSeat - b.PricePerSeat);
+
+                    renderRides(filtered);
+                });
+            </script>
+
+            @await Html.PartialAsync("_BookRideForm", bookRideModel)
+
+        }
+
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <!-- Leaflet Geosearch JS -->
+    <script src="https://unpkg.com/leaflet-geosearch@3.8.0/dist/geosearch.umd.js"></script>
+
+    <!-- Bootstrap JS (v5.x) Bundle includes Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous">
+
+    <script>
+
+        function openBookRideModal(rideId, pricePerSeat, availableSeats) {
+            console.log("Opening modal for ride:", rideId, "Price:", pricePerSeat, "Available seats:", availableSeats);
+
+            // Set ride ID
+            document.querySelector('#bookRideModal input[name="RideId"]').value = rideId;
+
+         document.querySelector('#bookRideModal input[name="SeatsBooked"]').min = 1;
+
+         document.querySelector('#bookRideModal input[name="SeatsBooked"]').max = availableSeats;
+
+            document.querySelector('#bookRideModal input[name="TotalAmount"]').value = pricePerSeat;
+
+            // Show modal
+            var modal = new bootstrap.Modal(document.getElementById('bookRideModal'));
+            modal.show();
+        }
+
+  
+
+        function submitBooking(e) {
+            e.preventDefault();
+            const rideId = document.getElementById("modalRideId").value;
+            const price = document.getElementById("modalPrice").value;
+            const seats = document.getElementById("modalSeats").value;
+
+            // You can send this to server using fetch or redirect
+            console.log("Booking ride:", { rideId, price, seats });
+
+            // Close modal
+            bootstrap.Modal.getInstance(document.getElementById('bookModal')).hide();
+
+            // You can redirect or show success message here
+            alert("Booking submitted (implement server-side logic)");
+        }
+
+
+
+        // Initialize map centered on India
+        let map = L.map('map').setView([20.5937, 78.9629], 5);
+        let originMarker, destinationMarker;
+        let routeLayer = L.layerGroup().addTo(map);
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Initialize geosearch provider
+        const provider = new GeoSearch.OpenStreetMapProvider();
+
+        // DOM elements
+        const originInput = document.getElementById("origin-input");
+        const destinationInput = document.getElementById("destination-input");
+        const originSearch = document.getElementById("origin-search");
+        const destinationSearch = document.getElementById("destination-search");
+        const searchOriginBtn = document.getElementById("search-origin");
+        const searchDestinationBtn = document.getElementById("search-destination");
+
+        // Map click handler
+        map.on('click', function (e) {
+            if (!originMarker) {
+                setOrigin(e.latlng);
+            } else if (!destinationMarker) {
+                setDestination(e.latlng);
+                drawRoute();
+            }
+        });
+
+        // Search origin location
+        searchOriginBtn.addEventListener('click', function () {
+            const query = originSearch.value;
+            if (query) {
+                searchLocation(query, setOrigin);
+            }
+        });
+
+        // Search destination location
+        searchDestinationBtn.addEventListener('click', function () {
+            const query = destinationSearch.value;
+            if (query) {
+                searchLocation(query, setDestination, function () {
+                    if (originMarker) drawRoute();
+                });
+            }
+        });
+
+        function setOrigin(latlng) {
+            if (originMarker) map.removeLayer(originMarker);
+            originMarker = L.marker(latlng, {
+                draggable: true,
+                icon: L.divIcon({
+                    className: 'origin-marker',
+                    html: '<div style="background-color: #3498db; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white;"></div>',
+                    iconSize: [24, 24]
+                })
+            }).addTo(map).bindPopup('Origin').openPopup();
+
+            reverseGeocode(latlng, originInput);
+
+            originMarker.on('dragend', function () {
+                reverseGeocode(originMarker.getLatLng(), originInput);
+                if (destinationMarker) drawRoute();
+            });
+        }
+
+        function setDestination(latlng) {
+            if (destinationMarker) map.removeLayer(destinationMarker);
+            destinationMarker = L.marker(latlng, {
+                draggable: true,
+                icon: L.divIcon({
+                    className: 'destination-marker',
+                    html: '<div style="background-color: #e74c3c; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white;"></div>',
+                    iconSize: [24, 24]
+                })
+            }).addTo(map).bindPopup('Destination').openPopup();
+
+            reverseGeocode(latlng, destinationInput);
+
+            destinationMarker.on('dragend', function () {
+                reverseGeocode(destinationMarker.getLatLng(), destinationInput);
+                drawRoute();
+            });
+        }
+
+        async function reverseGeocode(latlng, inputBox) {
+            try {
+                const response = await fetch(`/preverse-geocode?lat=${latlng.lat}&lng=${latlng.lng}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                console.log(data);
+
+                if (data && data.address) {
+                    let val = data.address.county || data.address.state_district || data.address.state || data.address.city;
+                    inputBox.value = val;
+                }
+            } catch (error) {
+                console.error('Geocoding error:', error);
+            }
+        }
+
+        function drawRoute() {
+            if (!originMarker || !destinationMarker) return;
+
+            routeLayer.clearLayers();
+
+            const origin = originMarker.getLatLng();
+            const destination = destinationMarker.getLatLng();
+
+            // Draw a simple straight line (for actual routing you'd need a routing service)
+            const route = L.polyline([origin, destination], {
+                color: '#27ae60',
+                weight: 4,
+                opacity: 0.7,
+                dashArray: '10, 10'
+            }).addTo(routeLayer);
+
+            // Adjust map view to show both points
+            map.fitBounds(L.latLngBounds(origin, destination), {
+                padding: [50, 50]
+            });
+        }
+
+        async function searchLocation(query, callback, success) {
+            try {
+                const response = await fetch(`/pgeocode?q=${encodeURIComponent(query)}`);
+
+                if (!response.ok) {
+                    throw new Error(`Geocoding failed: ${response.status}`);
+                }
+
+                const results = await response.json();
+
+                console.log(results);
+
+                if (results.length > 0) {
+                    const latlng = L.latLng(results[0].lat, results[0].lon);
+                    callback(latlng);
+                    if (success) success();
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error("Geocoding error:", error);
+                alert("Location search failed. Please try again later.");
+                return false;
+            }
+        }
+
+        // Set minimum date to today
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById("RideDate").min = today;
+        });
+    </script>
+</body>
+
+</html>

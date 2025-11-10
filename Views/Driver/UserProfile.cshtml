@@ -1,0 +1,187 @@
+@model RideShareFrontend.Models.DTOs.DriverProfileDto
+@{
+    Layout = "_DriverLayout.cshtml";
+    ViewData["Title"] = "User Profile";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/Driver/driver-profile.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+}
+
+<div class="container">
+    <h2>Driver verification</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <form asp-action="UserProfile" id="profileForm" method="post" enctype="multipart/form-data" novalidate>
+        @Html.AntiForgeryToken()
+
+@if (Model.isverfied)
+    {
+        <div class="verification-status verified">
+        <i class="fas fa-check-circle verification-icon"></i>
+            <span>Your profile is verified and approved</span>
+        </div>
+    }
+    else
+    {
+        <div class="verification-status not-verified">
+        <i class="fas fa-exclamation-circle verification-icon"></i>
+            <span>Your profile is not verified yet. Please wait for admin approval.</span>
+        </div>
+    }
+        
+
+        <!-- Personal Information Section -->
+        <h4>Personal Information</h4>
+        <div class="form-group">
+            <label>Profile Picture</label>
+            <input type="file" id="ProfilePictureFile" name="ProfilePictureFile" class="form-control"
+                accept="image/*" />
+            <input type="hidden" asp-for="ProfilePicture" />
+            <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+            <img id="profilePreview" src="@Model.ProfilePicture" class="img-thumbnail mt-2"
+                style="max-width: 200px; display: @(string.IsNullOrEmpty(Model.ProfilePicture) ? "none" : "block")" />
+        </div>
+        <div class="form-group">
+            <label asp-for="FirstName">First Name</label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName">Last Name</label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber">Phone Number</label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Address">Address</label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+
+        <!-- Driver-Specific Information Section -->
+        <h4>Driver Information</h4>
+        <div class="form-group">
+            <label asp-for="LicenseNumber">Driver's License Number</label>
+            <input asp-for="LicenseNumber" class="form-control" />
+            <span asp-validation-for="LicenseNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LicenseExpiryDate">License Expiry Date</label>
+            <input asp-for="LicenseExpiryDate" type="date" class="form-control" min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")/>
+            <span asp-validation-for="LicenseExpiryDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>License Image</label>
+            <input type="file" id="LicenseImageFile" name="LicenseImageFile" class="form-control" accept="image/*" />
+            <input type="hidden" asp-for="LicenseImageUrl" />
+            <span asp-validation-for="LicenseImageUrl" class="text-danger"></span>
+            <img id="licensePreview" src="@Model.LicenseImageUrl" class="img-thumbnail mt-2"
+                style="max-width: 200px; display: @(string.IsNullOrEmpty(Model.LicenseImageUrl) ? "none" : "block")" />
+        </div>
+        <div class="form-group">
+            <label asp-for="YearsOfExperience">Years of Driving Experience</label>
+            <input asp-for="YearsOfExperience" type="number" min="0" max="50" class="form-control" />
+            <span asp-validation-for="YearsOfExperience" class="text-danger"></span>
+        </div>
+
+        <!-- Emergency Contact Section -->
+        <h4>Emergency Contact</h4>
+        <div class="form-group">
+            <label asp-for="EmergencyContactName">Emergency Contact Name</label>
+            <input asp-for="EmergencyContactName" class="form-control" />
+            <span asp-validation-for="EmergencyContactName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="EmergencyContactPhone">Emergency Contact Phone</label>
+            <input asp-for="EmergencyContactPhone" class="form-control" />
+            <span asp-validation-for="EmergencyContactPhone" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        @if (!Model.IsNewProfile)
+        {
+            <button type="button" class="btn btn-danger" id="deleteProfile">Delete Profile</button>
+        }
+    </form>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        // Handle profile picture conversion
+        document.getElementById("ProfilePictureFile").addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    // Set the Base64 string to the hidden input
+                    document.getElementById("ProfilePicture").value = reader.result;
+                    // Show preview
+                    console.log(reader.result);
+
+                    const preview = document.getElementById("profilePreview");
+                    preview.src = reader.result;
+                    preview.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle license image conversion
+        document.getElementById("LicenseImageFile").addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    // Set the Base64 string to the hidden input
+                    document.getElementById("LicenseImageUrl").value = reader.result;
+                    // Show preview
+                    console.log(reader.result);
+                    const preview = document.getElementById("licensePreview");
+                    preview.src = reader.result;
+                    preview.style.display = "block";
+
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Delete profile button handler
+        document.getElementById("deleteProfile")?.addEventListener("click", function () {
+            if (confirm('Are you sure you want to delete your profile?')) {
+                fetch('/Driver/DeleteProfile', {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    credentials: 'include'
+                }).then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Failed to delete profile.');
+                    }
+                });
+            }
+        });
+    </script>
+}

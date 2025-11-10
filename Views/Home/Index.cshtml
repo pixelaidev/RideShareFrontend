@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "RideShare - Your Carpooling Companion";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // optional, if using a shared layout
+}
+
+@{
+    ViewData["Title"] = "Your Carpooling Companion";
+}
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-container">
+        <div class="hero-content">
+            <h1>Connect. <span class="highlight">Share.</span><br>Travel Smart.</h1>
+            <p>Join thousands of travelers who save money and reduce their carbon footprint through carpooling. Whether you're offering empty seats or looking for a ride, find your perfect travel match today.</p>
+            <a href="#" class="btn btn-secondary" onclick="openPopup('login-popup')">Login</a>
+<a href="#" class="btn btn-primary" onclick="openPopup('signup-popup')">Register</a>
+
+
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="ride-card">
+                <div class="ride-header">
+                    <div class="driver-avatar">AM</div>
+                    <div class="driver-info">
+                        <h4>Alex Morgan</h4>
+                        <p>⭐ 4.8 • Honda Civic</p>
+                    </div>
+                </div>
+                <div class="ride-details">
+                    <div class="route">
+                        <div class="location-dot from"></div>
+                        <span class="route-text">City Center Mall</span>
+                    </div>
+                    <div class="route-line"></div>
+                    <div class="route">
+                        <div class="location-dot to"></div>
+                        <span class="route-text">International Airport</span>
+                    </div>
+                </div>
+                <div class="ride-info">
+                    <div class="price">$28</div>
+                    <div class="seats">2 seats available</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

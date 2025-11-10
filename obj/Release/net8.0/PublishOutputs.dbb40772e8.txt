@@ -1,0 +1,15 @@
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\RideShareFrontend.exe
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\appsettings.Development.json
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\appsettings.json
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\RideShareFrontend.dll
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\RideShareFrontend.deps.json
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\RideShareFrontend.runtimeconfig.json
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\RideShareFrontend.pdb
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\Microsoft.IdentityModel.Logging.dll
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\Microsoft.IdentityModel.Protocols.dll
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\Microsoft.IdentityModel.Tokens.dll
+C:\Users\intel\Documents\RSCMAIN\RideShareFrontend\bin\Release\net8.0\publish\System.IdentityModel.Tokens.Jwt.dll

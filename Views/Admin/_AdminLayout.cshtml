@@ -1,0 +1,66 @@
+@using System.Security.Claims
+@{
+    var role = User.FindFirst(ClaimTypes.Role)?.Value;
+    var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - Admin Dashboard</title>
+    <link rel="stylesheet" href="~/css/passengerSidebar.css" />
+    @RenderSection("Styles", required: false)
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  
+</head>
+
+<body>
+<div class="dashboard-container">
+    @if (isAuthenticated && role == "Admin")
+    {
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-avatar"><i class="fas fa-user"></i></div>
+                <h3><a href="/Admin/Profile">ADMIN PROFILE</a></h3>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="/Admin/index"><i class="fas fa-home"></i><span>Home</span></a></li>
+                <li><a href="/Admin/Complaints"><i class="fas fa-exclamation-circle"></i><span>Complaints</span></a></li>
+                <li><a href="/Admin/Verification"><i class="fas fa-check-circle"></i><span>Verification</span></a></li> 
+                <li><a href="/Admin/PaymentStatus"><i class="fas fa-credit-card"></i><span>Payment Status</span></a></li>
+                <li><a href="/Admin/Analytics"><i class="fas fa-chart-line"></i><span>Analytics</span></a></li>
+                <li><a href="/Admin/Commission"><i class="fas fa-percentage"></i><span>Commission</span></a></li>
+               <li><a href="/Admin/LoginHistory"><i class="fas fa-history"></i><span>Login History</span></a></li>
+
+                <li>
+                    <form method="post" action="http://localhost:5125">
+                        <button type="submit" style="background:none;border:none;color:inherit;">
+                            <i class="fas fa-sign-out-alt"></i><span>LOGOUT</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <script>
+            alert("Unauthorized access. Redirecting...");
+            window.location.href = "/";
+        </script>
+    }
+
+    <main class="main-content">
+        @RenderBody()
+    </main>
+</div>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    
+@RenderSection("Scripts", required: false)
+</body>
+</html>

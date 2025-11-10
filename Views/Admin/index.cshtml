@@ -1,0 +1,140 @@
+@{
+
+    Layout = "_AdminLayout.cshtml";
+
+    ViewBag.Title = "Dashboard";
+
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Admin/admin.css" />
+}
+
+
+
+<div class="content-header">
+
+    <h1>Welcome to Your Admin Dashboard</h1>
+
+    
+
+</div>
+
+
+
+<div class="dashboard-grid">
+
+    <!-- Quick Stats Cards -->
+
+    <div class="stats-card">
+
+        <div class="card-icon">
+
+            <i class="fas fa-route"></i>
+
+        </div>
+
+        <div class="card-content">
+
+            <h3>Total Users</h3>
+
+            <p class="stat-number">24</p>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="stats-card">
+
+        <div class="card-icon">
+
+            <i class="fas fa-user-tie"></i>
+
+        </div>
+
+        <div class="card-content">
+
+            <h3>Total Drivers</h3>
+
+            <p class="stat-number">4</p>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="stats-card">
+
+        <div class="card-icon">
+
+            <i class="fas fa-star"></i>
+
+        </div>
+
+        <div class="card-content">
+
+            <h3>Rides Booked</h3>
+
+            <p class="stat-number">10</p>
+
+        </div>
+
+    </div>
+
+
+
+<!-- Recent Activity -->
+<div class="activity-section">
+    <h2>Quick Actions</h2>
+    <div class="activity-list">
+         <a href="/Admin/Verification" class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="activity-details">
+                 <h4>Approve Drivers</h4>
+                
+            </div>
+        </a>
+        <a href="/Admin/Analytics" class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="activity-details">
+                
+                <h4>Analytics</h4>
+               
+            </div>
+        </a>
+         <a href="/Admin/Complaints" class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div class="activity-details">
+                
+                <h4>Complaints</h4>
+                
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="quick-actions">
+    <h2>Recent Activity</h2>
+    <div class="action-buttons">
+        <a href="/Admin/Commission" class="action-btn primary">
+            <i class="fas fa-percentage"></i>Commissions
+        </a>
+        <a href="/Admin/Complaints" class="action-btn secondary">
+            <i class="fas fa-file-alt"></i>Manage Complaints
+        </a>
+        <a href="/Admin/PaymentStatus" class="action-btn tertiary">
+            <i class="fas fa-credit-card"></i>Payment Status
+        </a>
+    </div>
+</div>
+</div>

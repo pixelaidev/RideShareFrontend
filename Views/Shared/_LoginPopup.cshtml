@@ -1,0 +1,16 @@
+<div id="login-popup" class="popup-overlay" style="display:none;">
+    <div class="popup-box">
+        <span class="close-btn" onclick="closePopup('login-popup')">×</span>
+        <h2>Login</h2>
+        <form method="post" onsubmit="handleLogin(event)" action="/Account/Login">
+            <input type="email" name="Email" placeholder="Email" required />
+            <input type="password" name="Password" placeholder="Password" required />
+            <button type="submit">Login</button>
+        </form>
+
+        <!-- Forgot password link -->
+        <div style="margin-top: 10px; text-align: center;">
+            <a href="/VerifyOtp" style="text-decoration: none; color: #007BFF;">Forgot Password?</a>
+        </div>
+    </div>
+</div>

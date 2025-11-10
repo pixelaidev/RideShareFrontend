@@ -1,0 +1,130 @@
+@{
+    Layout = "_PassengerLayout.cshtml";
+    ViewBag.Title = "Dashboard";
+
+    // Get bookings from ViewBag (dynamic)
+    var bookings = ViewBag.Bookings ?? new List<dynamic>();
+    int confirmedRidesCount = 0;
+    decimal totalSpent = 0;
+
+    // Calculate stats safely
+    foreach (var booking in bookings)
+    {
+        if (booking.BookingStatus == "Confirmed")
+        {
+            confirmedRidesCount++;
+            totalSpent += booking.TotalAmount;
+        }
+    }
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/passenger.css" />
+}
+
+<div class="content-header">
+    <h1>Welcome to Your Dashboard</h1>
+    <p>Manage your rides and profile from here</p>
+</div>
+
+<div class="dashboard-grid">
+    <!-- Quick Stats Cards -->
+    <div class="stats-card">
+        <div class="card-icon">
+            <i class="fas fa-route"></i>
+        </div>
+        <div class="card-content">
+            <h3>Total Rides</h3>
+            <p class="stat-number">@bookings.Count</p>
+        </div>
+    </div>
+
+    <div class="stats-card">
+        <div class="card-icon">
+            <i class="fas fa-dollar-sign"></i>
+        </div>
+        <div class="card-content">
+            <h3>Total Spent</h3>
+            <p class="stat-number">$@totalSpent.ToString("0.00")</p>
+        </div>
+    </div>
+
+    <div class="stats-card">
+        <div class="card-icon">
+            <i class="fas fa-star"></i>
+        </div>
+        <div class="card-content">
+            <h3>Confirmed Rides</h3>
+            <p class="stat-number">@confirmedRidesCount</p>
+        </div>
+    </div>
+
+    <!-- Recent Bookings Section -->
+    <div class="activity-section">
+        <h2>Recent Bookings</h2>
+        <div class="activity-list">
+            @if (bookings.Count > 0)
+            {
+                foreach (dynamic booking in bookings)
+                {
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            @if (booking.BookingStatus == "Confirmed")
+                            {
+                                <i class="fas fa-check-circle text-success"></i>
+                            }
+                            else if (booking.BookingStatus == "Rejected")
+                            {
+                                <i class="fas fa-times-circle text-danger"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-clock text-warning"></i>
+                            }
+                        </div>
+                        <div class="activity-details">
+                            <h4>Booking #@booking.BookingId - @booking.BookingStatus</h4>
+                            <p>From @booking.PickupPoint to @booking.DropPoint</p>
+                            <p>@booking.SeatsBooked seat(s) - $@booking.TotalAmount.ToString("0.00")</p>
+                            <small>@booking.BookingTime.ToString("MMM dd, yyyy hh:mm tt")</small>
+                            @if (booking.BookingStatus == "Confirmed")
+                            {
+                                <div class="booking-actions mt-2">
+                                    <form asp-action="ProcessPayment" asp-controller="Passenger" method="post">
+                                        <input type="hidden" name="bookingId" value="@booking.BookingId" />
+                                        <input type="hidden" name="amount" value="@booking.TotalAmount" />
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            <i class="fas fa-credit-card"></i> Pay Now
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="no-activities">
+                    <p>No recent bookings found. Book your first ride!</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-buttons">
+            <a href="/Passenger/SearchRide" class="action-btn primary">
+                <i class="fas fa-plus"></i> Book New Ride
+            </a>
+            <a href="/Passenger/Wallet" class="action-btn secondary">
+                <i class="fas fa-wallet"></i> Add Money
+            </a>
+            <a href="/Passenger/History" class="action-btn tertiary">
+                <i class="fas fa-history"></i> View History
+            </a>
+        </div>
+    </div>
+</div>

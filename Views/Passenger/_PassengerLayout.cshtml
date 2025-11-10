@@ -1,0 +1,85 @@
+@using System.Security.Claims
+@{
+    var role = User.FindFirst(ClaimTypes.Role)?.Value;
+    var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - Passenger Dashboard</title>
+    <link rel="stylesheet" href="~/css/passengerSidebar.css" />
+    @RenderSection("Styles", required: false)
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Add Bootstrap Icons AFTER Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  
+</head>
+
+<body>
+<div class="dashboard-container">
+    @if (isAuthenticated && role == "Passenger")
+    {
+        <nav class="sidebar">
+            @await Component.InvokeAsync("PassengerSidebar")
+
+            <ul class="sidebar-menu">
+                <li><a href="/Passenger/SearchRide"><i class="fas fa-search-location"></i><span>SEARCH RIDE</span></a></li>
+                <li><a href="/Passenger/Wallet"><i class="fas fa-wallet"></i><span>WALLET</span></a></li>
+                <li><a href="/Passenger/Payments"><i class="fas fa-credit-card"></i><span>PAYMENTS</span></a></li>
+                <li><a href="/Passenger/History"><i class="fas fa-history"></i><span>HISTORY</span></a></li>
+                 <li><a href="/Passenger/Complaints"><i class="fas fa-history"></i><span>COMPLAINTS</span></a></li>
+               
+                <li>
+    <button type="button" onclick="logoutUser()" style="background:none;border:none;color:inherit;">
+        <i class="fas fa-sign-out-alt"></i><span>LOGOUT</span>
+    </button>
+</li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <script>
+            alert("Unauthorized access. Redirecting...");
+            window.location.href = "/";
+        </script>
+    }
+
+    <main class="main-content">
+        @RenderBody()
+    </main>
+</div>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+    async function logoutUser() {
+        try {
+            const response = await fetch("http://localhost:5157/api/auth/logout", {
+                method: "POST",
+                credentials: "include" // This sends the cookie
+            });
+
+            if (response.ok) {
+                alert("Logged out successfully.");
+                window.location.href = "/";
+            } else {
+                alert("Failed to log out.");
+            }
+        } catch (error) {
+            console.error("Logout error:", error);
+            alert("An error occurred while logging out.");
+        }
+    }
+</script>
+    
+@RenderSection("Scripts", required: false)
+</body>
+</html>

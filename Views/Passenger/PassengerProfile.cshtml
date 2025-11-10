@@ -1,0 +1,150 @@
+@model RideShareConnect.Models.UserProfileViewModel
+@{
+     Layout = "_PassengerLayout.cshtml";
+    ViewData["Title"] = "Passenger Profile";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/passenger-profile.css" />
+}
+
+<div class="container">
+    <h2>Passenger Profile</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <form  asp-action="PassengerProfile" id="profileForm" method="post" novalidate>
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+             <label>Upload Profile Picture</label>
+    <input type="file" id="ProfilePictureFile" class="form-control" accept="image/*" />
+    <input type="hidden" asp-for="ProfilePicture" />
+    <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FirstName">First Name</label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName">Last Name</label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber">Phone Number</label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Address">Address</label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        @if (!Model.IsNewProfile)
+        {
+            <button type="button" class="btn btn-danger" id="deleteProfile">Delete Profile</button>
+        }
+    </form>
+</div>
+
+@section Scripts {
+    <!-- <script>
+        $(document).ready(function () {
+            $("#profileForm").submit(async function (event) {
+                event.preventDefault();
+
+                var formData = {
+                    FirstName: $("#FirstName").val(),
+                    LastName: $("#LastName").val(),
+                    PhoneNumber: $("#PhoneNumber").val(),
+                    Address: $("#Address").val(),
+                    ProfilePicture: $("#ProfilePicture").val(),
+                    IsNewProfile: @Model.IsNewProfile.ToString().ToLower()
+                };
+
+                var token = $('input[name="__RequestVerificationToken"]').val();
+
+                var response = await fetch('/Passenger/PassengerProfile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': token
+                    },
+                    credentials: 'include', // Ensure jwt cookie is sent
+                    body: JSON.stringify(formData)
+                });
+
+                var result = await response.json();
+                if (result.success) {
+                    alert(result.message);
+                    location.reload();
+                } else {
+                    alert(result.message || 'Error saving profile.');
+                    if (result.errors) {
+                        result.errors.forEach(function (error) {
+                            console.log(error);
+                        });
+                    }
+                }
+            });
+
+            $("#deleteProfile").click(function () {
+                if (confirm('Are you sure you want to delete your profile?')) {
+                    fetch('/Passenger/DeleteProfile', {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        credentials: 'include' // Ensure jwt cookie is sent
+                    }).then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert('Failed to delete profile.');
+                        }
+                    });
+                }
+            });
+        });
+    </script> -->
+
+
+    <script>
+document.getElementById("ProfilePictureFile").addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onloadend = function () {
+            // Save Base64 string to hidden input
+            document.getElementById("ProfilePicture").value = reader.result;
+
+            // OPTIONAL: Show preview
+            let preview = document.getElementById("profilePreview");
+            if (!preview) {
+                preview = document.createElement("img");
+                preview.id = "profilePreview";
+                preview.className = "img-thumbnail mt-2";
+                preview.style.maxWidth = "200px";
+                e.target.parentNode.appendChild(preview);
+            }
+            preview.src = reader.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+
+}

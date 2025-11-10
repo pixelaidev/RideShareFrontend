@@ -1,0 +1,29 @@
+@model RideShareConnect.Models.UserProfileViewModel
+
+<div class="sidebar-header">
+    <div class="user-avatar">
+        @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+        {
+            <img src="@Model.ProfilePicture" 
+                 alt="Profile" 
+                 class="img-circle" 
+                 style="width:50px;height:50px;object-fit:cover;border-radius:50%;" />
+        }
+        else
+        {
+            <i class="fas fa-user"></i>
+        }
+    </div>
+    <h3>
+        <a href="/Passenger/PassengerProfile">
+            @if (!string.IsNullOrWhiteSpace(Model.FirstName) || !string.IsNullOrWhiteSpace(Model.LastName))
+            {
+                @($"{Model.FirstName} {Model.LastName}".Trim())
+            }
+            else
+            {
+                @:Passenger Profile
+            }
+        </a>
+    </h3>
+</div>

@@ -1,0 +1,434 @@
+/* Wallet Page Specific Styles */
+
+/* Content Header */
+.content-header {
+    margin-bottom: 40px;
+}
+
+.content-header h1 {
+    color: #748DAE;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.content-header p {
+    color: #666;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+/* Wallet Balance Section */
+.wallet-balance-section {
+    background: linear-gradient(135deg, #748DAE 0%, #9ECAD6 100%);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(116, 141, 174, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.wallet-balance-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    transform: rotate(45deg);
+}
+
+.balance-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.balance-label {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.balance-amount {
+    font-size: 56px;
+    font-weight: 700;
+    margin: 10px 0 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.last-updated {
+    font-size: 14px;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+/* Wallet Actions Grid */
+.wallet-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+/* Add Money Section */
+.add-money-section {
+    background: #FFFFFF;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9ecef;
+}
+
+.section-title {
+    color: #748DAE;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #9ECAD6;
+    display: flex;
+    align-items: center;
+}
+
+.section-title i {
+    margin-right: 12px;
+    font-size: 22px;
+}
+
+/* Amount Selection */
+.amount-selection {
+    margin-bottom: 25px;
+}
+
+.amount-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.amount-btn {
+    padding: 15px 20px;
+    border: 2px solid #e9ecef;
+    background: #FFFFFF;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #748DAE;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.amount-btn:hover {
+    border-color: #9ECAD6;
+    background: #f8f9fa;
+}
+
+.amount-btn.selected {
+    border-color: #748DAE;
+    background: linear-gradient(135deg, #9ECAD6, #748DAE);
+    color: #FFFFFF;
+}
+
+/* Custom Amount Input */
+.custom-amount {
+    position: relative;
+}
+
+.custom-amount input {
+    width: 100%;
+    padding: 15px 20px 15px 50px;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #748DAE;
+    transition: border-color 0.3s ease;
+}
+
+.custom-amount input:focus {
+    outline: none;
+    border-color: #9ECAD6;
+    box-shadow: 0 0 0 3px rgba(158, 202, 214, 0.1);
+}
+
+.custom-amount::before {
+    content: '$';
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    font-weight: 600;
+    color: #748DAE;
+}
+
+/* Payment Methods */
+.payment-methods {
+    margin-bottom: 25px;
+}
+
+.payment-method {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-method:hover {
+    border-color: #9ECAD6;
+    background: #f8f9fa;
+}
+
+.payment-method.selected {
+    border-color: #748DAE;
+    background: linear-gradient(135deg, rgba(158, 202, 214, 0.1), rgba(116, 141, 174, 0.1));
+}
+
+.payment-method input[type="radio"] {
+    margin-right: 15px;
+    transform: scale(1.2);
+}
+
+.payment-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #9ECAD6, #748DAE);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    color: white;
+    font-size: 18px;
+}
+
+.payment-details h4 {
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.payment-details p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Add Money Button */
+.add-money-btn {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #9ECAD6, #748DAE);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-money-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(116, 141, 174, 0.4);
+}
+
+.add-money-btn i {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+/* Recent Transactions */
+.recent-transactions {
+    background: #FFFFFF;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9ecef;
+}
+
+.transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.transaction-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #9ECAD6;
+    transition: all 0.3s ease;
+}
+
+.transaction-item:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+.transaction-info {
+    display: flex;
+    align-items: center;
+}
+
+.transaction-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 18px;
+    color: white;
+}
+
+.transaction-icon.credit {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.transaction-icon.debit {
+    background: linear-gradient(135deg, #dc3545, #fd7e14);
+}
+
+.transaction-details h4 {
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.transaction-details p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+.transaction-amount {
+    text-align: right;
+}
+
+.amount {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.amount.credit {
+    color: #28a745;
+}
+
+.amount.debit {
+    color: #dc3545;
+}
+
+.transaction-time {
+    color: #999;
+    font-size: 12px;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.empty-state i {
+    font-size: 48px;
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #748DAE;
+}
+
+.empty-state p {
+    font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .wallet-balance-section {
+        padding: 30px 20px;
+    }
+    
+    .balance-amount {
+        font-size: 42px;
+    }
+    
+    .wallet-actions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .amount-buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .add-money-section,
+    .recent-transactions {
+        padding: 20px;
+    }
+    
+    .content-header h1 {
+        font-size: 28px;
+    }
+    
+    .transaction-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .transaction-amount {
+        text-align: left;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .amount-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .balance-amount {
+        font-size: 36px;
+    }
+    
+    .payment-method {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .payment-method input[type="radio"] {
+        margin-bottom: 10px;
+    }
+}

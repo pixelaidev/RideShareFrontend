@@ -1,0 +1,132 @@
+@model RideShareFrontend.Models.DTOs.VehicleRegistrationViewModel
+
+@{
+    ViewData["Title"] = "Vehicle Management";
+    Layout = "_DriverLayout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Driver/driver-profile.css" />
+}
+
+<div class="container">
+    <h2>Vehicle Management</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    <form asp-action="VehicleManagement" asp-controller="Driver" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label asp-for="VehicleType"></label>
+            <select asp-for="VehicleType" class="form-control">
+                <option value="">Select Vehicle Type</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Hatchback">Hatchback</option>
+                <option value="Truck">Truck</option>
+                <option value="Motorcycle">Motorcycle</option>
+            </select>
+            <span asp-validation-for="VehicleType" class="text-danger"></span>
+        </div>
+
+
+
+        <div class="form-group">
+            <label asp-for="LicensePlate"></label>
+            <input asp-for="LicensePlate" class="form-control" placeholder="e.g. ABC-1234" />
+            <span asp-validation-for="LicensePlate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="InsuranceNumber"></label>
+            <input asp-for="InsuranceNumber" class="form-control" />
+            <span asp-validation-for="InsuranceNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="RegistrationExpiry"></label>
+            <input asp-for="RegistrationExpiry" type="date" class="form-control"
+                min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd") />
+            <span asp-validation-for="RegistrationExpiry" class="text-danger"></span>
+        </div>
+
+        <!-- RC Document Upload -->
+        <div class="form-group">
+            <label>RC Document</label>
+            <input type="file" id="RCDocumentFile" name="RCDocumentFile" class="form-control" accept="image/*,.pdf" />
+            <input type="hidden" asp-for="RCDocumentBase64" id="RCDocumentBase64" />
+            <span asp-validation-for="RCDocumentBase64" class="text-danger"></span>
+            <img id="rcPreview"
+                src="@(string.IsNullOrEmpty(Model.RCDocumentBase64) ? "" : $"data:image/*;base64,{Model.RCDocumentBase64}")"
+                class="img-thumbnail mt-2"
+                style="max-width: 200px; display: @(string.IsNullOrEmpty(Model.RCDocumentBase64) ? "none" : "block")" />
+        </div>
+
+        <!-- Insurance Document Upload -->
+        <div class="form-group">
+            <label>Insurance Document</label>
+            <input type="file" id="InsuranceDocumentFile" name="InsuranceDocumentFile" class="form-control"
+                accept="image/*,.pdf" />
+            <input type="hidden" asp-for="InsuranceDocumentBase64" id="InsuranceDocumentBase64" />
+            <span asp-validation-for="InsuranceDocumentBase64" class="text-danger"></span>
+            <img id="insurancePreview"
+                src="@(string.IsNullOrEmpty(Model.InsuranceDocumentBase64) ? "" : $"data:image/*;base64,{Model.InsuranceDocumentBase64}")"
+                class="img-thumbnail mt-2"
+                style="max-width: 200px; display: @(string.IsNullOrEmpty(Model.InsuranceDocumentBase64) ? "none" : "block")" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Vehicle</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // RC Document Upload & Preview
+        document.getElementById("RCDocumentFile").addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    document.getElementById("RCDocumentBase64").value = reader.result.split(',')[1];
+                    if (file.type.startsWith('image/')) {
+                        const preview = document.getElementById("rcPreview");
+                        preview.src = reader.result;
+                        preview.style.display = "block";
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Insurance Document Upload & Preview
+        document.getElementById("InsuranceDocumentFile").addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    document.getElementById("InsuranceDocumentBase64").value = reader.result.split(',')[1];
+                    if (file.type.startsWith('image/')) {
+                        const preview = document.getElementById("insurancePreview");
+                        preview.src = reader.result;
+                        preview.style.display = "block";
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // License plate formatting (uppercase)
+        document.getElementById("LicensePlate").addEventListener("input", function (e) {
+            this.value = this.value.toUpperCase();
+        });
+    </script>
+}

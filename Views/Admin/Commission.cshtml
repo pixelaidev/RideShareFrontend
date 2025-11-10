@@ -1,0 +1,53 @@
+@{
+    Layout = "_AdminLayout.cshtml";
+    ViewBag.Title = "Commission";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Admin/commission.css" />
+}
+
+
+<div class="commission-container">
+    <h2 class="wallet-balance-section" >Commission Management</h2>
+
+    <!-- Current Commission Rate -->
+    <div class="commission-current">
+        <h3>Current Commission Rate</h3>
+        <p class="commission-rate">15%</p>
+    </div>
+
+    <!-- Change Commission Rate -->
+    <div class="commission-change">
+        <h3>Change Commission Rate</h3>
+        <form>
+            <input type="number" step="0.1" min="0" max="100" placeholder="Enter new rate (%)" />
+            <button type="submit" class="btn-update">Update Rate</button>
+        </form>
+    </div>
+
+    <!-- Commission History -->
+    <div class="commission-history">
+        <h3>Commission History</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025-08-01</td>
+                    
+                    <td>15%</td>
+                </tr>
+                <tr>
+                    <td>2025-07-01</td>
+                    <td>12%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
