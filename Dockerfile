@@ -2,32 +2,26 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Clear NuGet caches to remove Windows paths
-RUN dotnet nuget locals all --clear
+# Copy csproj and restore dependencies
+COPY *.csproj ./
+RUN dotnet restore
 
-# Copy csproj and restore (no cache, no fallback, ignore failed sources)
-COPY *.csproj .
-RUN dotnet restore --no-cache /p:RestoreFallbackFolders="" /p:RestoreIgnoreFailedSources=true /p:RestoreAdditionalProjectFallbackFolders=""
-
-# Copy source (exclude NuGet.Config to avoid Windows paths)
+# Copy the entire source
 COPY . .
-RUN rm -f NuGet.Config  # Remove copied NuGet.Config if present
 
-# Publish Release (no restore, no fallback, ignore failed sources)
-RUN dotnet publish -c Release -o /app/publish --no-restore /p:RestoreFallbackFolders="" /p:RestoreIgnoreFailedSources=true /p:RestoreAdditionalProjectFallbackFolders=""
+# Publish in Release mode
+RUN dotnet publish -c Release -o /app/publish
 
-# Stage 3: Runtime
+# Stage 2: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
-# Copy published output
+# Copy the published app
 COPY --from=build /app/publish .
 
-# Expose port (Render sets $PORT)
-EXPOSE $PORT
+# Render automatically sets $PORT — we must listen on it.
+ENV ASPNETCORE_URLS=http://0.0.0.0:$PORT
 
-# Health check (optional)
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD curl --fail http://localhost:$PORT || exit 1
+EXPOSE 7777
 
-# Run the app
 ENTRYPOINT ["dotnet", "RideShareFrontend.dll"]
