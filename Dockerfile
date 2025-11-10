@@ -2,21 +2,21 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Clean NuGet cache to remove Windows paths
+# Clear NuGet caches to remove Windows paths
 RUN dotnet nuget locals all --clear
 
 # Copy csproj and restore (no cache, no fallback, ignore failed sources)
 COPY *.csproj .
-RUN dotnet restore --no-cache /p:RestoreFallbackFolders="" /p:RestoreIgnoreFailedSources=true
+RUN dotnet restore --no-cache /p:RestoreFallbackFolders="" /p:RestoreIgnoreFailedSources=true /p:RestoreAdditionalProjectFallbackFolders=""
 
-# Copy source (exclude local NuGet.Config if present to avoid Windows paths)
+# Copy source (exclude NuGet.Config to avoid Windows paths)
 COPY . .
-RUN rm -f NuGet.Config  # Remove any copied NuGet.Config with Windows paths
+RUN rm -f NuGet.Config  # Remove copied NuGet.Config if present
 
-# Publish Release (no restore, no fallback)
-RUN dotnet publish -c Release -o /app/publish --no-restore /p:RestoreFallbackFolders="" /p:RestoreIgnoreFailedSources=true
+# Publish Release (no restore, no fallback, ignore failed sources)
+RUN dotnet publish -c Release -o /app/publish --no-restore /p:RestoreFallbackFolders="" /p:RestoreIgnoreFailedSources=true /p:RestoreAdditionalProjectFallbackFolders=""
 
-# Stage 2: Runtime
+# Stage 3: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
