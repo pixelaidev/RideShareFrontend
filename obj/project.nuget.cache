@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ifbZ3wvfzMs=",
+  "dgSpecHash": "OF8xDJICJgg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\intel\\Documents\\RSCMAIN\\RideShareFrontend\\RideShareFrontend.csproj",
+  "projectFilePath": "C:\\Users\\intel\\Documents\\mainshare\\RideShareFrontend\\RideShareFrontend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\intel\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.4\\microsoft.aspnetcore.authentication.jwtbearer.8.0.4.nupkg.sha512",
     "C:\\Users\\intel\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",

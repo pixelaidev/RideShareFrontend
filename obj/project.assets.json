@@ -470,11 +470,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\intel\\Documents\\RSCMAIN\\RideShareFrontend\\RideShareFrontend.csproj",
+      "projectUniqueName": "C:\\Users\\intel\\Documents\\mainshare\\RideShareFrontend\\RideShareFrontend.csproj",
       "projectName": "RideShareFrontend",
-      "projectPath": "C:\\Users\\intel\\Documents\\RSCMAIN\\RideShareFrontend\\RideShareFrontend.csproj",
+      "projectPath": "C:\\Users\\intel\\Documents\\mainshare\\RideShareFrontend\\RideShareFrontend.csproj",
       "packagesPath": "C:\\Users\\intel\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\intel\\Documents\\RSCMAIN\\RideShareFrontend\\obj\\",
+      "outputPath": "C:\\Users\\intel\\Documents\\mainshare\\RideShareFrontend\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
