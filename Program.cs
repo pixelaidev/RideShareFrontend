@@ -137,7 +137,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 // ------------------- PIPELINE -------------------
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCookiePolicy();  // Before auth

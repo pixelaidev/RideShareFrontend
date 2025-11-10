@@ -20,7 +20,7 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Render automatically sets $PORT — we must listen on it.
-ENV ASPNETCORE_URLS=http://0.0.0.0:$PORT
+ENV ASPNETCORE_URLS=http://0.0.0.0:${PORT}
 
 EXPOSE 7777
 
