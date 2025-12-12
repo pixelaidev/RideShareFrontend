@@ -66,7 +66,7 @@ async function handleSignup(event) {
     }
 
     try {
-        const response = await fetch('http://localhost:5157/api/auth/register', {
+        const response = await fetch('https://rideshareconnect.onrender.com/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ async function handleSignup(event) {
     }
 
     try {
-        const response = await fetch('http://localhost:5157/api/auth/register', {
+        const response = await fetch('https://rideshareconnect.onrender.com/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -197,7 +197,7 @@ async function handleVerify(event) {
     };
 
     try {
-        const response = await fetch('http://localhost:5157/api/auth/verify-email', {
+        const response = await fetch('https://rideshareconnect.onrender.com/api/auth/verify-email', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -232,7 +232,7 @@ async function handleLogin(event) {
     const payload = { Email: email, Password: password };
 
     try {
-        const response = await fetch('http://localhost:5157/api/auth/login', {
+        const response = await fetch('https://rideshareconnect.onrender.com/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include', // important for cookie
